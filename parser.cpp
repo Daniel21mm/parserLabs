@@ -1,5 +1,6 @@
 #include "parser.h"
 
+#include <math.h>
 #include <QDebug>
 
 
@@ -155,7 +156,6 @@ void Parser::fillingInTheListOfCalculations()
 
             }
         }
-
     }
 }
 
@@ -171,7 +171,7 @@ bool Parser::isOperation(QString tokin)
         return true;
     else if( tokin == "=")
         return true;
-    else if(tokin == "<")
+    else if(tokin == "<" || tokin == ">" || tokin == "==" || tokin == "!=" || tokin == ">=" || tokin == "=<" )
         return true;
     else if( tokin == "+")
         return true;
@@ -180,6 +180,8 @@ bool Parser::isOperation(QString tokin)
     else if(  tokin == "*")
         return true;
     else if( tokin == "/" )
+        return true;
+    else if( tokin == "^" || tokin == "sqrt" )
         return true;
     else
         return false;
@@ -199,7 +201,7 @@ int Parser::priorityOfOperations(QString tokin)
         return -2;
     else if( tokin == "=")
         return 1;
-    else if(tokin == "<")
+    else if(tokin == "<" || tokin == ">" || tokin == "==" || tokin == "!=" || tokin == ">=" || tokin == "=<" )
         return 2;
     else if( tokin == "+")
         return 3;
@@ -211,6 +213,8 @@ int Parser::priorityOfOperations(QString tokin)
         return 4;
     else if( tokin == "else" )
         return 5;
+    else if(tokin == "^" || tokin =="sqrt")
+        return 6;
     else
         return 0;
 }
@@ -320,6 +324,96 @@ void Parser::performingAnOperation(QString operation)
             stack.push_back("false");
         }
     }
+    else if(operation == ">" )
+    {
+        double rightOperands = valueOfVariable( stack.back() );
+        stack.pop_back();
+
+
+        double leftOperands = valueOfVariable( stack.back() );
+        stack.pop_back();
+
+        if( leftOperands > rightOperands)
+        {
+            stack.push_back("true");
+        }
+        else
+        {
+            stack.push_back("false");
+        }
+    }
+    else if(operation == "==")
+    {
+        double rightOperands = valueOfVariable( stack.back() );
+        stack.pop_back();
+
+
+        double leftOperands = valueOfVariable( stack.back() );
+        stack.pop_back();
+
+        if( leftOperands == rightOperands)
+        {
+            stack.push_back("true");
+        }
+        else
+        {
+            stack.push_back("false");
+        }
+    }
+    else if(operation == "!=" )
+    {
+        double rightOperands = valueOfVariable( stack.back() );
+        stack.pop_back();
+
+
+        double leftOperands = valueOfVariable( stack.back() );
+        stack.pop_back();
+
+        if( leftOperands != rightOperands)
+        {
+            stack.push_back("true");
+        }
+        else
+        {
+            stack.push_back("false");
+        }
+    }
+    else if(operation == ">=" )
+    {
+        double rightOperands = valueOfVariable( stack.back() );
+        stack.pop_back();
+
+
+        double leftOperands = valueOfVariable( stack.back() );
+        stack.pop_back();
+
+        if( leftOperands >= rightOperands)
+        {
+            stack.push_back("true");
+        }
+        else
+        {
+            stack.push_back("false");
+        }
+    }
+    else if(operation == "=<")
+    {
+        double rightOperands = valueOfVariable( stack.back() );
+        stack.pop_back();
+
+
+        double leftOperands = valueOfVariable( stack.back() );
+        stack.pop_back();
+
+        if( leftOperands < rightOperands)
+        {
+            stack.push_back("true");
+        }
+        else
+        {
+            stack.push_back("false");
+        }
+    }
     else if( operation == "+")
     {
         double rightOperands = valueOfVariable( stack.back() );
@@ -372,7 +466,26 @@ void Parser::performingAnOperation(QString operation)
         stack.push_back(QString::number(  leftOperands / rightOperands  ));
 
     }
-    else
+    else if( operation == "^")
+    {
+        double rightOperands = valueOfVariable( stack.back() );
+        stack.pop_back();
+
+
+        double leftOperands = valueOfVariable( stack.back() );
+        stack.pop_back();
+
+
+        stack.push_back(QString::number(  pow(leftOperands, rightOperands)  ));
+    }
+    else if(operation == "sqrt")
+    {
+        double var = valueOfVariable( stack.back() );
+        stack.pop_back();
+
+        stack.push_back( QString::number(sqrt(var)));
+    }
+
         return;
 }
 
