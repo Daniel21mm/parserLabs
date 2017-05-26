@@ -246,7 +246,7 @@ void Parser::performingAnOperation(QString operation)
     if(operation == "print")
     {
         listOfCalculations.pop_front();
-        rezult += QString::number( valueOfVariable( stack.back() ) );
+        rezult += QString::number( valueOfVariable( stack.back() ) ) + " ";
     }
     else if(operation == "if")
     {

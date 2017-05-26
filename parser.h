@@ -25,7 +25,6 @@ private:
     bool                isOperation(QString tokin);
     int                 priorityOfOperations(QString tokin);
     void                calculate();
-    int                 numberOfOperands( QString operation );
     void                performingAnOperation(QString operation);
     double              valueOfVariable(QString var);
 
