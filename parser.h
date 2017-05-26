@@ -27,6 +27,7 @@ private:
     void                calculate();
     void                performingAnOperation(QString operation);
     double              valueOfVariable(QString var);
+    QVector<QString>    getRegion();
 
 private:
     QString                 data;

@@ -72,7 +72,6 @@ QString Parser::removingSpacesInTheBegin(QString str)
 
 void Parser::fillingInTheListOfCalculations()
 {
-    QVector<QString> stack;
     while(!tokinList.empty())
     {
         if(tokinList.front() == ";")
@@ -164,7 +163,7 @@ void Parser::fillingInTheListOfCalculations()
 
 bool Parser::isOperation(QString tokin)
 {
-    if(tokin == "print")
+    if(tokin == "print" || tokin == "repeat")
         return true;
     else if( tokin == "if" || tokin == "{" || tokin == "}" || tokin == "else")
         return true;
@@ -192,7 +191,7 @@ int Parser::priorityOfOperations(QString tokin)
 {
     if(tokin == "print")
         return 0;
-    else if( tokin == "if")
+    else if( tokin == "if" || tokin == "repeat" )
         return 0;
     else if( tokin == "{" || tokin == "}")
         return -1;
@@ -210,7 +209,7 @@ int Parser::priorityOfOperations(QString tokin)
         return 4;
     else if( tokin == "/" )
         return 4;
-    else if( tokin == "else")
+    else if( tokin == "else" )
         return 5;
     else
         return 0;
@@ -224,7 +223,11 @@ void Parser::calculate()
     while(!listOfCalculations.empty())
     {
         QString tokin = listOfCalculations.front();
-        if(  isOperation(tokin)   )
+        if( tokin == "if" || tokin == "else" || tokin == "repeat" )
+        {
+            performingAnOperation( tokin);
+        }
+        else if(  isOperation(tokin)   )
         {
             performingAnOperation( tokin);
             listOfCalculations.pop_front();
@@ -245,11 +248,43 @@ void Parser::performingAnOperation(QString operation)
 {
     if(operation == "print")
     {
-        listOfCalculations.pop_front();
-        rezult += QString::number( valueOfVariable( stack.back() ) );
+        rezult += QString::number( valueOfVariable( stack.back() ) ) + " ";
+        stack.pop_back();
     }
     else if(operation == "if")
     {
+        listOfCalculations.pop_front();
+
+        QVector<QString> regionIf = getRegion();
+        QVector<QString> regionElse;
+        if( listOfCalculations.front() == "else" )
+        {
+            listOfCalculations.pop_front();
+            regionElse = getRegion();
+        }
+
+        if(stack.back() == "true")
+        {
+            listOfCalculations = regionIf + listOfCalculations;
+        }
+        else if( stack.back() == "false")
+        {
+            listOfCalculations = regionElse + listOfCalculations;
+        }
+        stack.pop_back();
+
+    }
+    else if( operation == "repeat" )
+    {
+        listOfCalculations.pop_front();
+        QVector <QString> regionRepeat = getRegion();
+        int amount = static_cast<int>(valueOfVariable(stack.back()));
+        stack.pop_back();
+        for(int i(0); i < amount ; i++ )
+        {
+            listOfCalculations = regionRepeat + listOfCalculations;
+        }
+
 
     }
     else if( operation == "(" ||  operation == ")" )
@@ -282,7 +317,7 @@ void Parser::performingAnOperation(QString operation)
         }
         else
         {
-            stack.push_back("flase");
+            stack.push_back("false");
         }
     }
     else if( operation == "+")
@@ -350,6 +385,35 @@ double Parser::valueOfVariable(QString var)
         value = listVar[var];
     }
     return value;
+}
+
+QVector<QString> Parser::getRegion()
+{
+    QVector < QString > region;
+    if( "{" == listOfCalculations.front() )
+    {
+        listOfCalculations.pop_front();
+        int balans = 1;
+        bool flag = true;
+        while( flag )
+        {
+
+
+            if(listOfCalculations.front() == "{")
+                balans++;
+            else if(listOfCalculations.front() == "}" )
+                balans--;
+
+            if( ( balans == 0) &&  ( "}" == listOfCalculations.front() ) )
+                flag = false;
+
+            region.push_back(listOfCalculations.front() );
+            listOfCalculations.pop_front();
+
+
+        }
+    }
+    return region;
 }
 
 QString Parser::getRezult()
