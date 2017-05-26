@@ -16,12 +16,12 @@ Parser::Parser(QString data) :
     fillingInTheListOfTokens(data);
     fillingInTheListOfCalculations();
     calculate();
-    int i;
 }
 
 void Parser::fillingInTheListOfTokens(QString data)
 {
     QString rest = data.replace("\n"," ");
+
     while(  rest != "")
     {
         QString  current = rest.left(rest.indexOf(";"));
@@ -252,7 +252,7 @@ void Parser::performingAnOperation(QString operation)
 {
     if(operation == "print")
     {
-        rezult += QString::number( valueOfVariable( stack.back() ) ) + " ";
+        rezult += QString::number( valueOfVariable( stack.back() ) ) + "\n";
         stack.pop_back();
     }
     else if(operation == "if")

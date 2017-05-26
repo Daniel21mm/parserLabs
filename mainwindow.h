@@ -3,9 +3,11 @@
 
 #include <QMainWindow>
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QTextEdit>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QFileDialog>
 
 class MainWindow : public QWidget
 {
@@ -17,14 +19,27 @@ public:
 private slots:
 
     void goClick();
+    void openClick();
+    void saveClick();
+    void createrClic();
 
 private:
 
     QGridLayout* mainLauouy;
+
+    QHBoxLayout* menu;
+    QPushButton* open;
+    QPushButton* save;
+    QPushButton* creater;
+
     QTextEdit*   text;
-    QLineEdit*   consol;
+
+    QHBoxLayout* consolMenu;
+    QTextEdit*   consol;
     QPushButton* go;
 
+
+    QString      adressFile;
 
 };
 
