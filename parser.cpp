@@ -21,7 +21,7 @@ Parser::Parser(QString data) :
 void Parser::fillingInTheListOfTokens(QString data)
 {
     QString rest = data.replace("\n"," ");
-
+            rest = rest.trimmed();
     while(  rest != "")
     {
         QString  current = rest.left(rest.indexOf(";"));
