@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include <parser.h>
+#include <Core/parser.h>
 
 #include <QDebug>
 #include <QTextStream>
@@ -17,15 +17,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(open,SIGNAL(clicked(bool)),this, SLOT(openClick()));
     menu->addWidget(open);
 
-    save = new QPushButton;
-    save->setText("save");
-    connect(save,SIGNAL(clicked(bool)),this,SLOT(saveClick()));
-    menu->addWidget(save);
+//    save = new QPushButton;
+//    save->setText("save");
+//    connect(save,SIGNAL(clicked(bool)),this,SLOT(saveClick()));
+//    menu->addWidget(save);
 
-    creater = new QPushButton;
-    creater->setText("creater");
-    connect(creater,SIGNAL(clicked(bool)),this,SLOT(createrClic()));
-    menu->addWidget(creater);
+//    creater = new QPushButton;
+//    creater->setText("creater");
+//    connect(creater,SIGNAL(clicked(bool)),this,SLOT(createrClic()));
+//    menu->addWidget(creater);
 
 
     mainLauouy->addLayout(menu,0,0);
