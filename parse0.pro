@@ -15,7 +15,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    parser.cpp
+    Core/tokenizer.cpp \
+    Core/interpreter.cpp \
+    Core/calculate.cpp \
+    Core/_parser.cpp \
+    Core/var.cpp
 
 HEADERS  += mainwindow.h \
-    parser.h
+    Core/parser.h
